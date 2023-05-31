@@ -19,7 +19,13 @@ cimport numpy as np
 from cyipopt.utils import deprecated_warning, generate_deprecation_warning_msg
 from ipopt cimport *
 
-__all__ = ["set_logging_level", "setLoggingLevel", "Problem", "problem"]
+__all__ = [
+    "set_logging_level",
+    "setLoggingLevel",
+    "Problem",
+    "problem",
+    "CyIpoptEvaluationError",
+]
 
 DTYPEi = np.int32
 ctypedef np.int32_t DTYPEi_t
@@ -30,6 +36,10 @@ ctypedef np.double_t DTYPEd_t
 # Logging mechanism.
 #
 cdef int verbosity = logging.DEBUG
+
+
+class CyIpoptEvaluationError(Exception):
+    pass
 
 
 def set_logging_level(level=None):
@@ -736,7 +746,10 @@ cdef Bool constraints_cb(Index n,
         ret_val = self.__constraints(_x)
     except:
         self.__exception = sys.exc_info()
-        return True
+        if issubclass(self.__exception[0], CyIpoptEvaluationError):
+            return False
+        else:
+            return True
 
     np_g = np.array(ret_val, dtype=DTYPEd).flatten()
 
