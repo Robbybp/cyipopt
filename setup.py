@@ -143,17 +143,18 @@ def handle_ext_modules_win_32_other_ipopt():
 
     # These are the specific binaries in the IPOPT 3.13.2 binary download:
     # https://github.com/coin-or/Ipopt/releases/download/releases%2F3.13.2/Ipopt-3.13.2-win64-msvs2019-md.zip
-    IPOPT_LIBS = ["ipopt.dll", "ipoptamplinterface.dll"]
+    # Should we link against this library, or libipopt-3.dll?
+    IPOPT_LIBS = ["libipopt.dll.a"]
     IPOPT_LIB_DIRS = [os.path.join(ipoptdir, "lib")]
 
     IPOPT_DLL = [
-        "ipopt-3.dll",
-        "ipoptamplinterface-3.dll",
-        "libifcoremd.dll",
-        "libmmd.dll",
-        "msvcp140.dll",
-        "svml_dispmd.dll",
-        "vcruntime140.dll",
+        #"ipopt-3.dll",
+        #"ipoptamplinterface-3.dll",
+        #"libifcoremd.dll",
+        #"libmmd.dll",
+        #"msvcp140.dll",
+        #"svml_dispmd.dll",
+        #"vcruntime140.dll",
     ]
     IPOPT_DLL_DIRS = [os.path.join(ipoptdir, "bin")]
     EXT_MODULES = [Extension("ipopt_wrapper",
