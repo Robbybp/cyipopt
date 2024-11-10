@@ -138,17 +138,44 @@ def handle_ext_modules_win_32_conda_forge_ipopt():
 
 
 def handle_ext_modules_win_32_other_ipopt():
+    """Handle Ipopt obtained with `idaes get-extensions`.
+
+    We assume the directory structure is:
+
+    idaes
+    |--bin
+    |--lib
+    |--include
+       |--coin-or
+
+    IPOPTWINDIR should be idaes in the above structure.
+
+    """
     IPOPT_INCLUDE_DIRS = [os.path.join(ipoptdir, "include", "coin-or"),
                           np.get_include()]
 
-    # These are the specific binaries in the IPOPT 3.13.2 binary download:
-    # https://github.com/coin-or/Ipopt/releases/download/releases%2F3.13.2/Ipopt-3.13.2-win64-msvs2019-md.zip
-    # Should we link against this library, or libipopt-3.dll?
+    # These are the binaries we include in idaes-local/lib
+    # Our library is called libipopt.dll.a, but for some reason, the linker is looking
+    # for a file with extension .lib appended...
     IPOPT_LIBS = ["libipopt.dll.a"]
     IPOPT_LIB_DIRS = [os.path.join(ipoptdir, "lib")]
 
+    # These are DLLs we distribute in idaes/bin. It is not clear which if any
+    # of these are actually necessary to link against our Ipopt library.
     IPOPT_DLL = [
-        #"ipopt-3.dll",
+        "libblas.dll",
+        "libbz2-1.dll",
+        "libgcc_s_seh-1.dll",
+        "libgfortran-5.dll",
+        "libgomp-1.dll",
+        "libipopt-3.dll",
+        "liblapack.dll",
+        "libquadmath-0.dll",
+        "libsipopt-3.dll",
+        "libssp-0.dll",
+        "libstdc++-6.dll",
+        "libwinpthread-1.dll",
+        "zlib1.dll",
         #"ipoptamplinterface-3.dll",
         #"libifcoremd.dll",
         #"libmmd.dll",
